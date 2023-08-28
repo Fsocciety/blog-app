@@ -40,7 +40,7 @@ const Post = () => {
   return (
     <div className="post">
       <div className="content">
-        <img src={post.img}/>
+        <img src={`../upload/${post.img}`}/>
         <div className="user">
           {post.avatar && <img src={post.avatar}/>}
           <div className="info">
@@ -50,7 +50,7 @@ const Post = () => {
             </div>
             {currentUser.username === post.username &&
             <div className="edit">
-              <Link to={`/write?edit=${postID}`} alt="edit">
+              <Link to={`/write?edit=${postID}`} state={post} alt="edit">
                 <img src={Edit}/>
               </Link>
               <img onClick={handleDelete} src={Delete}/>
@@ -61,7 +61,7 @@ const Post = () => {
         <h1>{post.title}</h1>
         <p>{post.description}</p>
       </div>
-      <Menu />
+      <Menu category={post.cat}/>
     </div>
   )
 }
