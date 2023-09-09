@@ -2,8 +2,29 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const db = require("../db.js");
 const router = express.Router();
+const verifyToken = require("../verifyToken.js");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "damcyrnce",
+  api_key: "886898234196177",
+  api_secret: "hc5YaPv_9GclzG1lHalF4hDdzr0",
+});
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 router.get("/", (req, res) => {
+  console.log("radi");
   const q = req.query.category
     ? "SELECT * FROM posts WHERE cat = ?"
     : "SELECT * FROM posts";
@@ -23,25 +44,20 @@ router.get("/:id", (req, res) => {
   );
 });
 
-router.post("/", (req, res) => {
-  const token = req.cookies.access_token;
-
-  if (!token) return res.json("Not authenticated!");
-  jwt.verify(token, process.env.JWT, (err, userInfo) => {
-    if (err) return res.json("Token is not valid!");
-
+router.post("/", verifyToken, upload.single("file"), (req, res) => {
+  console.log(req.body);
+  cloudinary.uploader.upload(req.file.path).then((result) => {
     db.query(
       "INSERT INTO posts (title, description, img, cat, date, uid) VALUES (?, ?, ?, ?, ?, ?)",
       [
         req.body.title,
         req.body.desc,
-        req.body.img,
+        result.url,
         req.body.category,
         req.body.date,
-        userInfo.id,
+        req.user.id,
       ],
       (err, data) => {
-        console.log("proslo");
         if (err) return res.json(err);
         res.json("Post has been created");
       }

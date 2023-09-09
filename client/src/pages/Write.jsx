@@ -34,7 +34,7 @@ const Write = () => {
         title,
         desc: value,
         category,
-        img: image ? imageUrl : ""
+        img: imageUrl
       }, {withCredentials: true}).then((response) => {
         console.log(response);
       })
@@ -43,7 +43,7 @@ const Write = () => {
         title,
         desc: value,
         category,
-        img: image ? imageUrl : "",
+        img: imageUrl,
         date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")
       }, {withCredentials: true}).then((response) => {
         console.log(response);
