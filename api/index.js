@@ -18,6 +18,10 @@ app.use(
   })
 );
 
+app.get("/", (req, res) => {
+  res.json("Hello!");
+});
+
 app.use("/auth", authRoutes);
 app.use("/posts", postsRoutes);
 app.use("/users", usersRoutes);
@@ -26,6 +30,6 @@ process.on("uncaughtException", function (err) {
   console.log(err);
 });
 
-app.listen(8080, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log("Server started on port 8080...");
 });
