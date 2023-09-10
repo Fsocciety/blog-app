@@ -30,7 +30,7 @@ const Post = () => {
 
   const handleDelete = async () => {
     try {
-        const response = await axios.delete(`http://localhost:8080/posts/${postID}`, {withCredentials: true})
+        const response = await axios.delete(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
         navigate("/");
       } catch (error) {
         console.log(error);
