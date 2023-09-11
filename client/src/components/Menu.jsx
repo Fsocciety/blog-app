@@ -7,7 +7,7 @@ const Menu = ({category}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/posts/?category=${category}`, {withCredentials: true})
+        const response = await axios.get(`https://blog-vhyd.onrender.com/posts/?category=${category}`, {withCredentials: true})
         console.log(response);
         setPosts(response.data);
       } catch (error) {
@@ -21,7 +21,7 @@ const Menu = ({category}) => {
       <h1>Other posts you may like</h1>
       {posts.map(post => (
         <div className="post" key={post.id}>
-          <img src={`../upload/${post.img}`} alt="" />
+          <img src={post.img} alt="" />
           <h1>{post.title}</h1>
           <button>Read more</button>
         </div>

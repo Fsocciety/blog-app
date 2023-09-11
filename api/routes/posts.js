@@ -24,11 +24,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/", (req, res) => {
-  console.log("radi");
   const q = req.query.category
     ? "SELECT * FROM posts WHERE cat = ?"
     : "SELECT * FROM posts";
   db.query(q, [req.query.category], (err, data) => {
+    if (err) return res.json(err);
+    console.log("radi");
     res.json(data);
   });
 });

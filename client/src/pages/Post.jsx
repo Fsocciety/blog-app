@@ -18,7 +18,7 @@ const Post = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/posts/${postID}`, {withCredentials: true})
+        const response = await axios.get(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
         setPost(response.data[0]);
       } catch (error) {
         console.log(error);
@@ -31,6 +31,7 @@ const Post = () => {
   const handleDelete = async () => {
     try {
         const response = await axios.delete(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
+        console.log(response);
         navigate("/");
       } catch (error) {
         console.log(error);
@@ -40,7 +41,7 @@ const Post = () => {
   return (
     <div className="post">
       <div className="content">
-        <img src={`../upload/${post.img}`}/>
+        <img src={post.img}/>
         <div className="user">
           {post.avatar && <img src={post.avatar}/>}
           <div className="info">
