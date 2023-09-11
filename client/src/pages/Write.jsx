@@ -18,7 +18,7 @@ const Write = () => {
     try {
       const formData = new FormData();
       formData.append("file", image);
-      const response = await axios.post('http://localhost:8080/uploads', formData)
+      const response = await axios.post('https://blog-vhyd.onrender.com/uploads', formData)
       return response.data;
     } catch (error) {
       console.log(error);
@@ -28,9 +28,8 @@ const Write = () => {
   const publish = async (e) => {
     e.preventDefault();
     const imageUrl = await upload();
-    console.log(imageUrl);
     try {
-      state ? await axios.put(`http://localhost:8080/posts/${state.id}`, {
+      state ? await axios.put(`https://blog-vhyd.onrender.com/posts/${state.id}`, {
         title,
         desc: value,
         category,
@@ -39,7 +38,7 @@ const Write = () => {
         console.log(response);
       })
       :
-      await axios.post(`http://localhost:8080/posts/`, {
+      await axios.post(`https://blog-vhyd.onrender.com/posts/`, {
         title,
         desc: value,
         category,

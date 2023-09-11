@@ -4,7 +4,7 @@ import axios from 'axios'
 
 
 const Home = () => {
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState(null)
 
   const cat = useLocation().search;
 
@@ -12,8 +12,6 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://blog-vhyd.onrender.com/posts/${cat}`, {withCredentials: true})
-        console.log(response);
-        console.log()
         setPosts(response.data);
       } catch (error) {
         console.log(error);
@@ -26,13 +24,13 @@ const Home = () => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent;
   }
-
+  console.log(posts);
   return (
     <div className="posts">
-      {posts.map(post => (
+      {posts ? posts.map(post => (
         <div className="post" key={post.id}>
           <div className="img">
-            <img src={`../upload/${post.img}`}/>
+            <img src={post.img}/>
           </div>
           <div className="content">
             <Link className="link" to={`/post/${post.id}`}><h1>{post.title}</h1></Link>
@@ -40,7 +38,7 @@ const Home = () => {
             <Link className='readmore-btn' to={`/post/${post.id}`}>Read more</Link>
           </div>
         </div>
-      ))}
+      )) : <></>}
     </div>
   )
 }
