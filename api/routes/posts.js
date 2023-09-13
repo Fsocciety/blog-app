@@ -66,6 +66,10 @@ router.post("/", verifyToken, upload.single("file"), (req, res) => {
   });
 });
 
+router.post("/upload", (req, res) => {
+  res.json(req.file);
+});
+
 router.delete("/:id", (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.json("Not authenticated!");
