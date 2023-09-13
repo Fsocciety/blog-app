@@ -7,7 +7,7 @@ const Menu = ({category}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/posts/?category=${category}`, {withCredentials: true})
+        const response = await axios.get(`https://blog-vhyd.onrender.com/posts/?category=${category}`, {withCredentials: true})
         console.log(response);
         setPosts(response.data);
       } catch (error) {

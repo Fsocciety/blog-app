@@ -20,8 +20,8 @@ const Post = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/posts/${postID}`, {withCredentials: true})
-        const res = await axios.get(`http://localhost:8080/comments/${postID}`, {withCredentials: true})
+        const response = await axios.get(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
+        const res = await axios.get(`https://blog-vhyd.onrender.com/comments/${postID}`, {withCredentials: true})
         setPost(response.data[0]);
         setComments(res.data);
       } catch (error) {
@@ -34,7 +34,7 @@ const Post = () => {
 
   const handleDelete = async () => {
     try {
-        const response = await axios.delete(`http://localhost:8080/posts/${postID}`, {withCredentials: true})
+        const response = await axios.delete(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
         console.log(response);
         navigate("/");
       } catch (error) {
@@ -44,7 +44,7 @@ const Post = () => {
 
   const handleComment = async () => {
     try {
-        const response = await axios.post(`http://localhost:8080/comments`,{
+        const response = await axios.post(`https://blog-vhyd.onrender.com/comments`,{
           comment: value,
           date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           uid: currentUser.id,

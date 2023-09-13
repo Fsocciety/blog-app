@@ -19,7 +19,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/auth/register", inputs, {withCredentials: true});
+      await axios.post("https://blog-vhyd.onrender.com/auth/register", inputs, {withCredentials: true});
       navigate('/login')
     } catch (err) {
       setError(err.response.data)
