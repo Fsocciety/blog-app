@@ -29,17 +29,20 @@ router.get("/", (req, res) => {
     : "SELECT * FROM posts";
   db.query(q, [req.query.category], (err, data) => {
     if (err) return res.json(err);
-    console.log("radi");
     res.json(data);
   });
 });
 
 router.get("/:id", (req, res) => {
   db.query(
-    "SELECT posts.id, username, avatar, title, description, img, date, cat FROM users JOIN posts ON users.id = posts.uid WHERE posts.id = ?",
+    `SELECT posts.id, username, avatar, title, description, img, date, cat
+    FROM users
+    JOIN posts
+    ON users.id = posts.uid
+    WHERE posts.id = ?`,
     [req.params.id],
     (err, data) => {
-      if (err) return res.json(err);
+      if (err) return res.json("Error:" + err);
       res.json(data);
     }
   );

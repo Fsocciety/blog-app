@@ -38,7 +38,7 @@ router.post("/login", (req, res) => {
       (err, data) => {
         if (err) return res.json(err);
         if (!data.length) return res.status(404).json("User not found");
-
+        console.log(data);
         const isPasswordOk = bcrypt.compareSync(
           req.body.password,
           data[0].password
