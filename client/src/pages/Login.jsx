@@ -21,7 +21,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // await axios.post("http://localhost:8080/auth/login", inputs, {withCredentials: true});
+      // await axios.post("https://blog-vhyd.onrender.com/auth/login", inputs, {withCredentials: true});
       await login(inputs);
       navigate('/')
     } catch (err) {

@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://blog-vhyd.onrender.com/posts/${cat}`, {withCredentials: true})
+        const response = await axios.get(`http://localhost:8080/posts/${cat}`, {withCredentials: true})
         setPosts(response.data);
       } catch (error) {
         console.log(error);

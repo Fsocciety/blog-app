@@ -18,8 +18,9 @@ const Write = () => {
   const upload = async () => {
     try {
       const formData = new FormData();
+      console.log(image);
       formData.append("file", image);
-      const response = await axios.post('https://blog-vhyd.onrender.com/uploads', formData)
+      const response = await axios.post('https://blog-vhyd.onrender.com/posts/upload', formData)
       return response.data;
     } catch (error) {
       console.log(error);
@@ -39,7 +40,7 @@ const Write = () => {
         console.log(response);
       })
       :
-      await axios.post(`https://blog-vhyd.onrender.com/posts/`, {
+      await axios.post(`https://blog-vhyd.onrender.com/posts`, {
         title,
         desc: value,
         category,
