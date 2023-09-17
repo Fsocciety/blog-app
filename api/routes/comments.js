@@ -12,7 +12,7 @@ router.get("/:id", (req, res) => {
     WHERE postid = ?`,
     req.params.id,
     (err, data) => {
-      if (err) return res.json("Error: " + err);
+      if (err) return res.json("Comments/Postid error: " + err);
       res.json(data);
     }
   );
@@ -24,10 +24,17 @@ router.post("/", (req, res) => {
     "INSERT INTO comments (comment, date, uid, postid) VALUES (?, ?, ?, ?)",
     [comment, date, uid, postid],
     (err, data) => {
-      if (err) return res.json(err);
+      if (err) return res.json("Post comment error:" + err);
       res.json({ data: data, status: "Comment posted" });
     }
   );
+});
+
+router.delete("/:id", (req, res) => {
+  db.query("DELETE FROM comments WHERE id = ?", req.params.id, (err, data) => {
+    if (err) return res.json("Delete comment error: " + err);
+    res.json({ data: data, status: `Comment id: ${req.params.id} deleted` });
+  });
 });
 
 module.exports = router;

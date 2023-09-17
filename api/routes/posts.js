@@ -7,9 +7,9 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: "damcyrnce",
-  api_key: "886898234196177",
-  api_secret: "hc5YaPv_9GclzG1lHalF4hDdzr0",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
 const storage = multer.diskStorage({
@@ -48,25 +48,36 @@ router.get("/:id", (req, res) => {
   );
 });
 
-router.post("/", verifyToken, upload.single("file"), (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
+  console.log(req.file);
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    // Return the URL of the uploaded image
+    res.json({ imageUrl: result.secure_url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error uploading image" });
+  }
+});
+
+router.post("/", verifyToken, (req, res) => {
   console.log(req.body);
-  cloudinary.uploader.upload(req.file.path).then((result) => {
-    db.query(
-      "INSERT INTO posts (title, description, img, cat, date, uid) VALUES (?, ?, ?, ?, ?, ?)",
-      [
-        req.body.title,
-        req.body.desc,
-        result.url,
-        req.body.category,
-        req.body.date,
-        req.user.id,
-      ],
-      (err, data) => {
-        if (err) return res.json(err);
-        res.json("Post has been created");
-      }
-    );
-  });
+  db.query(
+    "INSERT INTO posts (title, description, img, cat, date, uid) VALUES (?, ?, ?, ?, ?, ?)",
+    [
+      req.body.title,
+      req.body.desc,
+      req.body.img,
+      req.body.category,
+      req.body.date,
+      req.user.id,
+    ],
+    (err, data) => {
+      if (err) return res.json(err);
+      res.json("Post has been created");
+    }
+  );
 });
 
 router.post("/upload", (req, res) => {
