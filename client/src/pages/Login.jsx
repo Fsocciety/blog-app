@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useContext } from 'react'
 import { AuthContext } from '../context/authContext'
+import backIcon from '../assets/left-arrow.png'
+
 
 const Login = () => {
   const [inputs, setInputs] = useState({
@@ -47,6 +49,7 @@ const Login = () => {
           ) : (
           <></>
         )}
+        <Link to={"/"}><img className='back-icon' src={backIcon}/></Link>
       </form>
     </div>
   )

@@ -6,6 +6,8 @@ import Menu from '../components/Menu.jsx'
 import { AuthContext } from "../context/authContext.jsx"
 import axios from 'axios';
 import moment from 'moment';
+import parse from 'html-react-parser';
+
 
 const Post = () => {
   const [post, setPost] = useState({});
@@ -35,7 +37,6 @@ const Post = () => {
   const handleDelete = async () => {
     try {
         const response = await axios.delete(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
-        console.log(response);
         navigate("/");
       } catch (error) {
         console.log(error);
@@ -44,20 +45,32 @@ const Post = () => {
 
   const handleComment = async () => {
     try {
-        const response = await axios.post(`https://blog-vhyd.onrender.com/comments`,{
-          comment: value,
-          date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          uid: currentUser.id,
-          postid: postID
-        },
-        {withCredentials: true})
-        console.log(response);
-        setValue('')
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await axios.post(`https://blog-vhyd.onrender.com/comments`,{
+        comment: value,
+        date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+        uid: currentUser.id,
+        postid: postID
+      },
+      {withCredentials: true})
+      setValue('')
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  const handleCommentDelete = async (e) => {
+    try {
+      const response = await axios.delete(`https://blog-vhyd.onrender.com/comments/${e.target.parentElement.id}`, {withCredentials: true});
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
+  const getText = (text) => {
+    text = parse(String(text));
+    return text
+  }
 
   return (
     <div className="post">
@@ -80,17 +93,20 @@ const Post = () => {
             ) : (<></>)}
           </div>
         </div>
-        <h1>{post.title}</h1>
-        <p>{post.description}</p>
+        <h1 className='title'>{post.title}</h1>
+        <div className='post-description'>{getText(post.description)}</div>
         <div className="comments">
           <h1>Comments</h1>
           {comments && comments.map(comment => (
-            <div key={comment.id} className="comment">
+            <div key={comment.id} id={comment.id} className="comment">
               <div className="user">
                 <img src={comment.avatar} alt="avatar" />
                 <h2>{comment.username}</h2>
               </div>
               <p>{comment.comment}</p>
+              {currentUser ? (currentUser.id === comment.uid &&
+                <img onClick={handleCommentDelete} src={Delete} className="del-icon"/>
+              ) : (<></>)}
             </div>
           ))}
           {currentUser ? (
@@ -103,7 +119,7 @@ const Post = () => {
           <div className="input">
             <div className='not-auth'>You have to be logged in to comment.  <Link className='login' to={'/login'}>Login</Link></div>
             <textarea maxLength='255' className='comment-input' value={value} onChange={(e) => setValue(e.target.value)}/>
-            <button disabled='true' onClick={handleComment}>Comment</button>
+            <button disabled={true} onClick={handleComment}>Comment</button>
           </div>
           )}
           

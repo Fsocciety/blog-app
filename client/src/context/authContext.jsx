@@ -7,11 +7,11 @@ export const AuthContextProvider = ({children})=> {
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
 
   const login = async (inputs) => {
-    const response = await axios.post("https://blog-vhyd.onrender.com/auth/login", inputs, {withCredentials: true});
+    const response = await axios.post(`https://blog-vhyd.onrender.com/auth/login`, inputs, {withCredentials: true});
     setCurrentUser(response.data);
   }
   const logout = async (inputs) => {
-    await axios.post("https://blog-vhyd.onrender.com/auth/logout", {}, {withCredentials: true});
+    await axios.post(`https://blog-vhyd.onrender.com/auth/logout`, {}, {withCredentials: true});
     setCurrentUser(null);
   }
   console.log(currentUser);

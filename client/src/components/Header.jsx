@@ -3,10 +3,16 @@ import { useContext } from 'react'
 import { useState } from 'react'
 import {Link} from 'react-router-dom'
 import { AuthContext } from '../context/authContext.jsx'
+import HeaderMenu from './HeaderMenu.jsx'
+import menuIcon from '../assets/menu.png'
 
 const Header = () => {
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { currentUser, logout } = useContext(AuthContext)
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
 
   return (
     <div className="header">
@@ -34,7 +40,9 @@ const Header = () => {
           )}
           <Link className='link' to="/write">Write</Link>
         </div>
+        <img src={menuIcon} onClick={toggleMenu} className="menu-btn"/>
       </div>
+      {isMenuOpen && <HeaderMenu />}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import backIcon from '../assets/left-arrow.png'
 
 const Register = () => {
   const [inputs, setInputs] = useState({
@@ -19,7 +20,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://blog-vhyd.onrender.com/auth/register", inputs, {withCredentials: true});
+      await axios.post(`https://blog-vhyd.onrender.com/auth/register`, inputs, {withCredentials: true});
       navigate('/login')
     } catch (err) {
       setError(err.response.data)
@@ -47,6 +48,7 @@ const Register = () => {
           ) : (
           <></>
         )}
+        <Link to={"/login"}><img className='back-icon' src={backIcon}/></Link>
       </form>
     </div>
   )

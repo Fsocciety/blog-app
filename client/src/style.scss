@@ -14,12 +14,12 @@ html {
   font-family: 'Roboto', sans-serif;
 }
 
-.app {
-  display: flex;
-  justify-content: center;
 
+
+.app {
   .container {
-    width: 1200px;
+    max-width: 1200px;
+    margin: 0 auto;
     // Login & Register
     .auth {
       display: flex;
@@ -106,7 +106,12 @@ html {
             padding: 5px 15px;
           }
         }
-
+        .back-icon {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          width: 36px;
+        }
       }
     }
     // Header
@@ -152,6 +157,11 @@ html {
               }
             }
         }
+      }
+      .menu-btn {
+        display: none;
+        cursor: pointer;
+        width: 36px;
       }
     }
     // Footer
@@ -209,7 +219,7 @@ html {
             z-index: -1;
           }   
         }
-        p {
+        .small-description {
           color: #fff;
         }
         .link {
@@ -310,11 +320,11 @@ html {
             }
           }
         }
-        h1 {
+        .title {
           font-size: 42px;
           color: $main-color;
         }
-        p {
+        .post-description {
           color: #fff;
           text-align: justify;
           line-height: 34px;
@@ -324,6 +334,7 @@ html {
           flex-direction: column;
           gap: 40px;
           h1 {
+            color: $main-color;
             margin-bottom: 40px;
           }
           .comment {
@@ -331,6 +342,18 @@ html {
             background-color: #424242;
             border-radius: 15px;
             padding: 20px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            img {
+              height: 20px;
+              width: 20px;
+              cursor: pointer;
+              &:hover {
+                transform: scale(1.2);
+              }
+            }
           }
           .user {
             img {
@@ -423,6 +446,7 @@ html {
     }
     // Write
     .add {
+      margin-top: 100px;
       .content {
         display: flex;
         gap: 40px;
@@ -436,6 +460,7 @@ html {
             border: 1px solid #fff;
             background-color: $bg-main;
             color: #fff;
+            padding: 5px;
           }
           .editor-container {
             height: 300px;
@@ -454,18 +479,59 @@ html {
           display: flex;
           flex-direction: column;
           gap: 20px;
-
+          color: #fff;
+          h1 {
+            color: $main-color;
+          }
           .publish {
             border: 1px solid #fff;
             padding: 15px;
             display: flex;
             flex-direction: column;
             gap: 8px;
+            .upload-btn {
+              width: max-content;
+              padding: 10px 40px;
+              border-radius: 25px;
+              border: none;
+              cursor: pointer;
+              background-color: transparent;
+              border: 1px solid $main-color;
+              color: $main-color;
+              font-size: 14px;
+              font-weight: 400;
+              text-decoration: none;
+          
+              &:hover {
+                background-color: $main-color;
+                border: 1px solid $main-color;
+                color: $bg-main;
+              }
+            }
 
             .buttons {
               display: flex;
               flex-direction: row;
               justify-content: space-between;
+              button {
+                width: max-content;
+                padding: 10px 40px;
+                border-radius: 25px;
+                border: none;
+                cursor: pointer;
+                background-color: transparent;
+                border: 1px solid $main-color;
+                color: $main-color;
+                font-size: 14px;
+                font-weight: 400;
+                text-decoration: none;
+              
+                &:hover {
+                  background-color: $main-color;
+                  border: 1px solid $main-color;
+                  color: $bg-main;
+                }
+              }
             }
             label {
               cursor: pointer;
@@ -490,3 +556,84 @@ html {
     }
   }
 }
+
+
+
+@media all and (max-width: 650px) {
+  .header {
+    .links {
+      display: none !important;
+    }
+    .menu-btn {
+      display: flex !important;
+    }
+    .header-menu {
+      ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        .link {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+          text-decoration: none;
+          height: 40px;
+          background-color: #ebd262;
+          width: 150px;
+          border-radius: 15px;
+        }
+        .user-links {
+          display: flex;
+          justify-content: center;
+          flex-direction: row;
+          align-items: center;
+          gap: 10px;
+          border-radius: 15px;
+          background-color: #ebd262;
+          width: 150px;
+          height: 40px;
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+          .username {
+            color: #fff;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+  body .posts {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 75px;
+    margin: 0 40px;
+    .post {
+      display: flex !important;
+      flex-direction: column !important;
+      .img {
+        flex: 2;
+        position: relative;
+        height: 400px;
+    
+        img {
+          width: 300px;
+          height: 100px;
+          border-radius: 25px;
+          object-fit: cover;
+        }
+    
+        &::after {
+          content: "" !important;
+        }
+      }
+    }
+  }
+}
+

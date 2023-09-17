@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import 'react-quill/dist/quill.bubble.css'
 import axios from 'axios'
 import { useLocation, useNavigate } from 'react-router-dom'
 import moment from 'moment';
@@ -15,12 +16,12 @@ const Write = () => {
 
   const navigate = useNavigate();
 
+
   const upload = async () => {
+    const formData = new FormData();
+    formData.append("file", image);
     try {
-      const formData = new FormData();
-      console.log(image);
-      formData.append("file", image);
-      const response = await axios.post('https://blog-vhyd.onrender.com/posts/upload', formData)
+      const response = await axios.post(`https://blog-vhyd.onrender.com/posts/upload`, formData)
       return response.data;
     } catch (error) {
       console.log(error);
@@ -29,7 +30,8 @@ const Write = () => {
 
   const publish = async (e) => {
     e.preventDefault();
-    const imageUrl = await upload();
+    const { imageUrl } = await upload();
+    
     try {
       state ? await axios.put(`https://blog-vhyd.onrender.com/posts/${state.id}`, {
         title,
@@ -63,7 +65,7 @@ const Write = () => {
           <div className='editor-container'>
             <ReactQuill
               className='editor'
-              theme='snow'
+              theme='bubble'
               value={value}
               onChange={setValue}
             />
@@ -72,12 +74,9 @@ const Write = () => {
         <div className="options">
           <div className="publish">
             <h1>Publish</h1>
-            <p><span>Status: </span>Draft</p>
-            <p><span>Visibility: </span>Public</p>
             <input style={{display: "none"}} type="file" id="file" onChange={e => setImage(e.target.files[0])}/>
-            <label htmlFor="file">Upload file</label>
+            <label htmlFor="file" className='upload-btn'>Upload file</label>
             <div className='buttons'>
-              <button>Save as draft</button>
               <button onClick={publish}>Publish</button>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {Link, useLocation} from 'react-router-dom'
 import axios from 'axios'
-
+import parse from 'html-react-parser';
 
 const Home = () => {
   const [posts, setPosts] = useState(null)
@@ -21,10 +21,15 @@ const Home = () => {
   }, [cat])
 
   const getText = (html) => {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent;
+    html = html.slice(0, 500)
+    if (html[html.length - 1] != ' ') {
+      html = html.slice(0, -2)
+      html += '...'
+    } 
+    html = parse(html);
+    return html
   }
-  console.log(posts);
+
   return (
     <div className="posts">
       {posts ? posts.map(post => (
@@ -34,7 +39,7 @@ const Home = () => {
           </div>
           <div className="content">
             <Link className="link" to={`/post/${post.id}`}><h1>{post.title}</h1></Link>
-            <p>{getText(post.description)}</p>
+            <div className='small-description'>{getText(post.description)}</div>
             <Link className='readmore-btn' to={`/post/${post.id}`}>Read more</Link>
           </div>
         </div>
