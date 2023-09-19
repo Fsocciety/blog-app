@@ -47,7 +47,7 @@ router.post("/login", (req, res) => {
 
         const { password, ...other } = data[0];
         const token = jwt.sign({ id: data[0].id }, process.env.JWT);
-        res.cookie("access_token", token, { httpOnly: true });
+        res.cookie("access_token", token);
         res.status(200).json(other);
       }
     );

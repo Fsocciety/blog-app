@@ -3,19 +3,21 @@ const db = require("../db");
 
 const router = express.Router();
 
-router.get("/:id", (req, res) => {
-  db.query(
-    `SELECT comments.id, comment, uid, postid, users.username, users.avatar
+router.get("/", (req, res) => {
+  const q = req.query.postid
+    ? `SELECT comments.id, comment, uid, postid, users.username, users.avatar
     FROM comments
     JOIN users
     ON uid = users.id
-    WHERE postid = ?`,
-    req.params.id,
-    (err, data) => {
-      if (err) return res.json("Comments/Postid error: " + err);
-      res.json(data);
-    }
-  );
+    WHERE postid = ?`
+    : `SELECT comments.id, comment, uid, postid, users.username, users.avatar
+    FROM comments
+    JOIN users
+    ON uid = users.id`;
+  db.query(q, req.query.postid, (err, data) => {
+    if (err) return res.json("Comments/Postid error: " + err);
+    res.json(data);
+  });
 });
 
 router.post("/", (req, res) => {
