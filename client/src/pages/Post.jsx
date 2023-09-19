@@ -23,7 +23,7 @@ const Post = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://blog-vhyd.onrender.com/posts/${postID}`, {withCredentials: true})
-        const res = await axios.get(`https://blog-vhyd.onrender.com/comments/${postID}`, {withCredentials: true})
+        const res = await axios.get(`https://blog-vhyd.onrender.com/comments/?postid=${postID}`, {withCredentials: true})
         setPost(response.data[0]);
         setComments(res.data);
       } catch (error) {

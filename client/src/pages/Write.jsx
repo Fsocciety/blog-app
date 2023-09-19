@@ -21,7 +21,7 @@ const Write = () => {
     const formData = new FormData();
     formData.append("file", image);
     try {
-      const response = await axios.post(`https://blog-vhyd.onrender.com/posts/upload`, formData)
+      const response = await axios.post(`https://blog-vhyd.onrender.com/posts/upload`, formData, {withCredentials: true})
       return response.data;
     } catch (error) {
       console.log(error);

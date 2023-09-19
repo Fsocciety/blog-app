@@ -623,10 +623,10 @@ html {
         height: 400px;
     
         img {
-          width: 300px;
-          height: 100px;
-          border-radius: 25px;
-          object-fit: cover;
+          width: 300px !important;
+          height: 100px !important;
+          border-radius: 25px !important;
+          object-fit: cover !important;
         }
     
         &::after {
