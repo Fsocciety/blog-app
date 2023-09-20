@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://blog-frontend-07wc.onrender.com",
+    origin: ["https://blog-frontend-07wc.onrender.com"],
     credentials: true,
   })
 );
