@@ -14,11 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://blog-frontend-07wc.onrender.com",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "https://blog-frontend-07wc.onrender.com",
     credentials: true,
   })
 );
