@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post("/register", (req, res) => {
   const {email, username} = req.body;
-  if (email)
 
   // Check if user exists
   db.query(
