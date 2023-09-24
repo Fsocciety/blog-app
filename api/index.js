@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/auth.js");
 const postsRoutes = require("./routes/posts.js");
-const commentsRoutes = require("./routes/comments.js");
 const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger.js");
@@ -200,7 +199,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/auth", authRoutes);
 app.use("/posts", postsRoutes);
-app.use("/comments", commentsRoutes);
 
 process.on("uncaughtException", function (err) {
   console.log(err);
