@@ -17,36 +17,36 @@ const Write = () => {
   const navigate = useNavigate();
 
 
-  const upload = async () => {
-    const formData = new FormData();
-    formData.append("file", image);
-    try {
-      const response = await axios.post(`https://blog-vhyd.onrender.com/posts/upload`, formData, {withCredentials: true})
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // const upload = async () => {
+  //   const formData = new FormData();
+  //   formData.append("file", image);
+  //   try {
+  //     const response = await axios.post(`https://blog-vhyd.onrender.com/posts/upload`, formData, {withCredentials: true})
+  //     return response.data;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const publish = async (e) => {
     e.preventDefault();
-    const { imageUrl } = await upload();
+    // const { imageUrl } = await upload();
+    const formData = new FormData();
+    formData.append("file", image);
     
     try {
-      state ? await axios.put(`https://blog-vhyd.onrender.com/posts/${state.id}`, {
+      state ? await axios.put(`https://blog-vhyd.onrender.com/posts/${state.id}`, formData, {
         title,
         desc: value,
         category,
-        img: imageUrl
       }, {withCredentials: true}).then((response) => {
         console.log(response);
       })
       :
-      await axios.post(`https://blog-vhyd.onrender.com/posts`, {
+      await axios.post(`https://blog-vhyd.onrender.com/posts`, formData, {
         title,
         desc: value,
         category,
-        img: imageUrl,
         date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss")
       }, {withCredentials: true}).then((response) => {
         console.log(response);
