@@ -10,8 +10,8 @@ export const AuthContextProvider = ({children})=> {
     const response = await axios.post(`https://blog-vhyd.onrender.com/auth/login`, inputs, {withCredentials: true});
     setCurrentUser(response.data);
   }
-  const logout = async (inputs) => {
-    await axios.post(`https://blog-vhyd.onrender.com/auth/logout`, {}, {withCredentials: true});
+  const logout = async () => {
+    await axios.post(`https://blog-vhyd.onrender.com/auth/logout`, {withCredentials: true});
     setCurrentUser(null);
   }
   console.log(currentUser);
