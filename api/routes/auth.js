@@ -54,7 +54,7 @@ router.post("/login", (req, res) => {
           httpOnly: true,
           sameSite: "none",
           secure: true,
-          maxAge: 900000 
+          maxAge: 900000
         });
         res.status(200).json(other);
       }
