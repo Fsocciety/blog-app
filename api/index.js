@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const authRoutes = require("./routes/auth.js");
+const authRoutes = require("./routes/auth");
 const postsRoutes = require("./routes/posts.js");
 const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://blog-frontend-07wc.onrender.com", "http://localhost:5173"],
+    origin: ["https://blog-frontend-07wc.onrender.com"],
     credentials: true,
   })
 );

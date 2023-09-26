@@ -12,6 +12,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://blog-vhyd.onrender.com/posts/${cat}`, {withCredentials: true})
+        console.log(response);
         setPosts(response.data);
       } catch (error) {
         console.log(error);
@@ -19,7 +20,7 @@ const Home = () => {
     }
     fetchData();
   }, [cat])
-
+  console.log(posts);
   const getText = (html) => {
     html = html.slice(0, 500)
     if (html[html.length - 1] != ' ') {
@@ -32,7 +33,7 @@ const Home = () => {
 
   return (
     <div className="posts">
-      {posts ? posts.map(post => (
+      {/* {posts ? posts.map(post => (
         <div className="post" key={post.id}>
           <div className="img">
             <img src={post.img}/>
@@ -43,7 +44,7 @@ const Home = () => {
             <Link className='readmore-btn' to={`/post/${post.id}`}>Read more</Link>
           </div>
         </div>
-      )) : <></>}
+      )) : <></>} */}
     </div>
   )
 }
