@@ -28,10 +28,16 @@ router.get("/", (req, res) => {
   const q = req.query.category
     ? "SELECT * FROM posts WHERE category = $1"
     : "SELECT * FROM posts";
-  client.query(q, [req.query.category], (err, result) => {
-    if (err) return res.json(""+ err);
-    res.json(result.rows);
-  });
+  req.query.category ? 
+    client.query(q, [req.query.category], (err, result) => {
+      if (err) return res.json(""+ err);
+      res.json(result.rows);
+    })
+    : 
+    client.query(q, (err, result) => {
+      if (err) return res.json(""+ err);
+      res.json(result.rows);
+    });
 });
 
 router.get("/:id", (req, res) => {

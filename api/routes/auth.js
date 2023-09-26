@@ -33,6 +33,7 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
+  console.log('login')
   try {
     client.query(
       "SELECT * FROM users WHERE username = $1",
