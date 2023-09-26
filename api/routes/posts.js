@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const db = require("../db.js");
+const client = require("../db.js");
 const router = express.Router();
 const verifyToken = require("../verifyToken.js");
 const multer = require("multer");
@@ -25,60 +25,62 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/", (req, res) => {
+  console.log(req.query.category)
   const q = req.query.category
-    ? "SELECT * FROM posts WHERE cat = ?"
+    ? "SELECT * FROM posts WHERE category = $1"
     : "SELECT * FROM posts";
-  db.query(q, [req.query.category], (err, data) => {
-    if (err) return res.json(err);
-    res.json(data);
+  client.query(q, [req.query.category], (err, result) => {
+    if (err) return res.json(""+ err);
+    res.json(result.rows);
   });
 });
 
 router.get("/:id", (req, res) => {
-  db.query(
-    `SELECT posts.*, username, avatar
+  const q = `SELECT posts.*, username, avatar
     FROM users
     JOIN posts
     ON users.id = posts.uid
-    WHERE posts.id = ?`,
-    req.params.id,
-    (err, data) => {
-      if (err) return res.json("Error:" + err);
-      res.json(data);
+    WHERE posts.id = $1`;
+  const values = [req.params.id];
+
+  client.query(q, values, (err, result) => {
+      if (err) return res.json(err);
+      console.log('result')
+      res.json(result.rows);
     }
   );
 });
 
 router.get("/:postId/comments", (req, res) => {
-  db.query(
+  client.query(
     `SELECT comments.*, users.username, users.avatar
     FROM comments
     JOIN users
     ON uid = users.id
-    WHERE postid = ?`,
-    req.params.postId,
-    (err, data) => {
+    WHERE postid = $1`,
+    [req.params.postId],
+    (err, result) => {
       if (err) return res.json("Error:" + err);
-      res.json(data);
+      res.json(result.rows);
     }
   );
 });
 
 router.post("/:postId/comments", verifyToken, (req, res) => {
-  db.query(
-    "INSERT INTO comments (comment, date, uid, postid) VALUES (?, ?, ?, ?)",
+  client.query(
+    "INSERT INTO comments (comment, date, uid, postid) VALUES ($1, $2, $3, $4)",
     [req.body.comment, moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"), req.user.id, req.params.postId],
-    (err, data) => {
+    (err, result) => {
       if (err) return res.json("Post comment error:" + err);
-      res.status(200).json({ data: data, status: `Comment has been posted...` });
+      res.status(200).json({ data: result, status: `Comment has been posted...` });
     }
   );
 });
 
 router.delete("/:postId/comments/:commentId", verifyToken, (req, res) => {
-  db.query("DELETE FROM comments WHERE id = ?", req.params.commentId, (err, data) => {
+  client.query("DELETE FROM comments WHERE id = ?", req.params.commentId, (err, result) => {
     if (err) return res.json("Delete comment error: " + err);
-    res.json({ data: data, status: `Comment id: ${req.params.commentId} deleted` });
+    res.json({ result: result, status: `Comment id: ${req.params.commentId} deleted` });
   });
 });
 
@@ -98,20 +100,20 @@ router.delete("/:postId/comments/:commentId", verifyToken, (req, res) => {
 router.post("/", verifyToken, upload.single("file"), async (req, res) => {
   console.log(req.file);
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    db.query(
-      "INSERT INTO posts (title, description, img, cat, date, uid) VALUES (?, ?, ?, ?, ?, ?)",
+    const image = await cloudinary.uploader.upload(req.file.path);
+    client.query(
+      "INSERT INTO posts (title, description, img, cat, date, uid) VALUES ($1, $2, $3, $4, $5, $6)",
       [
         req.body.title,
         req.body.desc,
-        result.secure_url,
+        image.secure_url,
         req.body.category,
         moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
         req.user.id,
       ],
-      (err, data) => {
+      (err, result) => {
         if (err) return res.json(err);
-        res.json({ data: data, message: "Post has been created"});
+        res.json({ data: result, message: "Post has been created"});
       }
     );
   } catch (error) {
@@ -128,10 +130,10 @@ router.delete("/:id", (req, res) => {
     if (err) return res.json("Token is not valid!");
 
     const postID = req.params.id;
-    db.query(
-      "DELETE FROM posts WHERE id = ? AND uid = ?",
+    client.query(
+      "DELETE FROM posts WHERE id = $1 AND uid = $2",
       [postID, userInfo.id],
-      (err, data) => {
+      (err, result) => {
         if (err) return res.json("You can delete only your post!");
         res.json("Post has been deleted");
       }
@@ -148,8 +150,8 @@ router.put("/:id", (req, res) => {
 
     const postId = req.params.id;
 
-    db.query(
-      "UPDATE posts SET title = ?, desc = ?, img = ?, cat = ? WHERE id = ? AND uid = ?",
+    client.query(
+      "UPDATE posts SET title = $1, desc = $2, img = $3, cat = $4 WHERE id = $5 AND uid = $6",
       [
         req.body.title,
         req.body.desc,
@@ -158,7 +160,7 @@ router.put("/:id", (req, res) => {
         postId,
         userInfo.id,
       ],
-      (err, data) => {
+      (err, result) => {
         if (err) return res.json(err);
         res.json("Post has been updated");
       }

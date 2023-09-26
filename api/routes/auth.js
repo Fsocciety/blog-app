@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("../db.js");
+const client = require("../db.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -9,8 +9,8 @@ router.post("/register", (req, res) => {
   const {email, username} = req.body;
 
   // Check if user exists
-  db.query(
-    "SELECT * FROM users WHERE email = ? OR username = ?",
+  client.query(
+    "SELECT * FROM users WHERE email = $1 OR username = $2",
     [email, username],
     (err, data) => {
       if (err) return res.json(err);
@@ -20,8 +20,8 @@ router.post("/register", (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, salt);
 
       const values = [req.body.username, req.body.email, hash];
-      db.query(
-        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+      client.query(
+        "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
         values,
         (err, data) => {
           if (err) return res.json(err);
@@ -34,21 +34,21 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   try {
-    db.query(
-      "SELECT * FROM users WHERE username = ?",
-      req.body.username,
-      (err, data) => {
+    client.query(
+      "SELECT * FROM users WHERE username = $1",
+      [req.body.username],
+      (err, result) => {
+        console.log(result.rows);
         if (err) return res.json(err);
-        if (!data.length) return res.status(404).json("User not found");
-        console.log(data);
+        if (!result.rows.length) return res.status(404).json("User not found");
         const isPasswordOk = bcrypt.compareSync(
           req.body.password,
-          data[0].password
+          result.rows[0].password
         );
         if (!isPasswordOk) return res.json("Wrong password");
 
-        const { password, ...other } = data[0];
-        const token = jwt.sign({ id: data[0].id }, process.env.JWT);
+        const { password, ...other } = result.rows[0];
+        const token = jwt.sign({ id: result.rows[0].id }, process.env.JWT);
         console.log(token);
         res.cookie("access_token", token, {
           httpOnly: true,
