@@ -25,7 +25,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/", (req, res) => {
-  console.log(req.query.category)
   const q = req.query.category
     ? "SELECT * FROM posts WHERE category = $1"
     : "SELECT * FROM posts";
